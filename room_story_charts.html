@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>房间故事</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #E8DED5 0%, #D9CFC3 100%);
+            color: #6B5F5A;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            font-weight: 300;
+            color: #8B7B73;
+            margin-bottom: 10px;
+            letter-spacing: 4px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            color: #A39891;
+            font-weight: 300;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(139, 123, 115, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-title {
+            font-size: 20px;
+            color: #8B7B73;
+            margin-bottom: 30px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 房间分布圆环图 */
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .room-card {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .room-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(139, 123, 115, 0.15);
+        }
+        
+        .room-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+        
+        .room-name {
+            font-size: 16px;
+            color: #8B7B73;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .room-time {
+            font-size: 28px;
+            color: #B5A99D;
+            font-weight: 300;
+            margin-bottom: 5px;
+        }
+        
+        .room-percent {
+            font-size: 12px;
+            color: #A39891;
+        }
+        
+        /* 时间轴 */
+        .timeline {
+            position: relative;
+            padding: 30px 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .timeline-time {
+            width: 80px;
+            font-size: 14px;
+            color: #A39891;
+            text-align: right;
+            padding-right: 20px;
+        }
+        
+        .timeline-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #C7B8A1;
+            position: relative;
+            margin: 4px 20px;
+            box-shadow: 0 0 0 4px rgba(199, 184, 161, 0.2);
+        }
+        
+        .timeline-content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 15px 20px;
+            border-radius: 12px;
+        }
+        
+        .timeline-title {
+            font-size: 15px;
+            color: #8B7B73;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .timeline-desc {
+            font-size: 13px;
+            color: #A39891;
+        }
+        
+        /* 季节变化 */
+        .season-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .season-card {
+            text-align: center;
+            padding: 25px 15px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .season-card.spring {
+            background: linear-gradient(135deg, rgba(169, 181, 160, 0.3), rgba(169, 181, 160, 0.2));
+        }
+        
+        .season-card.summer {
+            background: linear-gradient(135deg, rgba(249, 217, 181, 0.3), rgba(249, 217, 181, 0.2));
+        }
+        
+        .season-card.autumn {
+            background: linear-gradient(135deg, rgba(199, 184, 161, 0.3), rgba(199, 184, 161, 0.2));
+        }
+        
+        .season-card.winter {
+            background: linear-gradient(135deg, rgba(167, 181, 195, 0.3), rgba(167, 181, 195, 0.2));
+        }
+        
+        .season-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .season-name {
+            font-size: 14px;
+            color: #8B7B73;
+            margin-bottom: 8px;
+        }
+        
+        .season-value {
+            font-size: 20px;
+            color: #B5A99D;
+            font-weight: 300;
+        }
+        
+        /* 月度对比折线图模拟 */
+        .chart-area {
+            height: 200px;
+            position: relative;
+            margin: 30px 0;
+            padding: 20px 0;
+        }
+        
+        .chart-line {
+            display: flex;
+            align-items: flex-end;
+            height: 100%;
+            gap: 12px;
+        }
+        
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, #C7B8A1, #B5A99D);
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: all 0.5s ease;
+            cursor: pointer;
+        }
+        
+        .chart-bar:hover {
+            opacity: 0.8;
+            transform: translateY(-5px);
+        }
+        
+        .chart-label {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #A39891;
+        }
+        
+        .chart-label span {
+            flex: 1;
+            text-align: center;
+        }
+        
+        /* 活动标签云 */
+        .activity-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 25px 0;
+        }
+        
+        .activity-tag {
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 14px;
+            background: rgba(199, 184, 161, 0.2);
+            color: #8B7B73;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .activity-tag:hover {
+            background: rgba(199, 184, 161, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .activity-count {
+            background: rgba(139, 123, 115, 0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        
+        /* 统计卡片 */
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.4));
+            padding: 25px;
+            border-radius: 16px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            color: #B5A99D;
+            font-weight: 300;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: #A39891;
+        }
+        
+        /* 情感引用 */
+        .quote-block {
+            background: linear-gradient(135deg, rgba(201, 181, 179, 0.2), rgba(167, 181, 195, 0.2));
+            padding: 35px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 30px 0;
+            border-left: 4px solid #C9B5B3;
+        }
+        
+        .quote-text {
+            font-size: 18px;
+            color: #8B7B73;
+            font-style: italic;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .quote-author {
+            font-size: 13px;
+            color: #A39891;
+        }
+        
+        /* 进度条样式 */
+        .progress-item {
+            margin: 20px 0;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #8B7B73;
+        }
+        
+        .progress-bar-bg {
+            height: 10px;
+            background: rgba(199, 184, 161, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>房间故事</h1>
+            <p>每一个角落，都藏着时光的秘密</p>
+        </div>
+        
+        <!-- 房间使用分布 -->
+        <div class="card">
+            <div class="card-title">
+                <span>🏠</span>
+                你最常待的地方
+            </div>
+            <div class="room-grid">
+                <div class="room-card">
+                    <div class="room-icon">🛋️</div>
+                    <div class="room-name">客厅</div>
+                    <div class="room-time">6.8h</div>
+                    <div class="room-percent">每天 · 35%</div>
+                </div>
+                <div class="room-card">
+                    <div class="room-icon">🛏️</div>
+                    <div class="room-name">卧室</div>
+                    <div class="room-time">9.2h</div>
+                    <div class="room-percent">每天 · 47%</div>
+                </div>
+                <div class="room-card">
+                    <div class="room-icon">🍳</div>
+                    <div class="room-name">厨房</div>
+                    <div class="room-time">1.8h</div>
+                    <div class="room-percent">每天 · 9%</div>
+                </div>
+                <div class="room-card">
+                    <div class="room-icon">📚</div>
+                    <div class="room-name">书房</div>
+                    <div class="room-time">1.7h</div>
+                    <div class="room-percent">每天 · 9%</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 一天的时间线 -->
+        <div class="card">
+            <div class="card-title">
+                <span>⏰</span>
+                典型的一天
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">07:30</div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">晨间仪式</div>
+                        <div class="timeline-desc">拉开窗帘，让阳光洒进房间</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">09:00</div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">专注工作</div>
+                        <div class="timeline-desc">在书房开始一天的创作</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">12:30</div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">午餐时光</div>
+                        <div class="timeline-desc">厨房飘来饭菜的香气</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">18:00</div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">家人相聚</div>
+                        <div class="timeline-desc">客厅里的欢声笑语</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">22:30</div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">夜晚宁静</div>
+                        <div class="timeline-desc">关上灯，结束充实的一天</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 四季变化 -->
+        <div class="card">
+            <div class="card-title">
+                <span>🍃</span>
+                四季的温度
+            </div>
+            <div class="season-grid">
+                <div class="season-card spring">
+                    <div class="season-icon">🌸</div>
+                    <div class="season-name">春</div>
+                    <div class="season-value">19°C</div>
+                </div>
+                <div class="season-card summer">
+                    <div class="season-icon">☀️</div>
+                    <div class="season-name">夏</div>
+                    <div class="season-value">27°C</div>
+                </div>
+                <div class="season-card autumn">
+                    <div class="season-icon">🍂</div>
+                    <div class="season-name">秋</div>
+                    <div class="season-value">21°C</div>
+                </div>
+                <div class="season-card winter">
+                    <div class="season-icon">❄️</div>
+                    <div class="season-name">冬</div>
+                    <div class="season-value">15°C</div>
+                </div>
+            </div>
+            <div class="quote-block">
+                <div class="quote-text">
+                    "家的温度，总是刚刚好"
+                </div>
+                <div class="quote-author">— 你最喜欢秋天的傍晚</div>
+            </div>
+        </div>
+        
+        <!-- 月度在家时长 -->
+        <div class="card">
+            <div class="card-title">
+                <span>📊</span>
+                这一年的足迹
+            </div>
+            <div class="chart-area">
+                <div class="chart-line">
+                    <div class="chart-bar" style="height: 65%;" title="1月"></div>
+                    <div class="chart-bar" style="height: 58%;" title="2月"></div>
+                    <div class="chart-bar" style="height: 72%;" title="3月"></div>
+                    <div class="chart-bar" style="height: 68%;" title="4月"></div>
+                    <div class="chart-bar" style="height: 75%;" title="5月"></div>
+                    <div class="chart-bar" style="height: 82%;" title="6月"></div>
+                    <div class="chart-bar" style="height: 78%;" title="7月"></div>
+                    <div class="chart-bar" style="height: 85%;" title="8月"></div>
+                    <div class="chart-bar" style="height: 80%;" title="9月"></div>
+                    <div class="chart-bar" style="height: 88%;" title="10月"></div>
+                    <div class="chart-bar" style="height: 92%;" title="11月"></div>
+                    <div class="chart-bar" style="height: 70%;" title="12月"></div>
+                </div>
+            </div>
+            <div class="chart-label">
+                <span>1月</span>
+                <span>2月</span>
+                <span>3月</span>
+                <span>4月</span>
+                <span>5月</span>
+                <span>6月</span>
+                <span>7月</span>
+                <span>8月</span>
+                <span>9月</span>
+                <span>10月</span>
+                <span>11月</span>
+                <span>12月</span>
+            </div>
+            <div style="text-align: center; margin-top: 20px; font-size: 14px; color: #A39891;">
+                平均每月在家 218 小时
+            </div>
+        </div>
+        
+        <!-- 活动标签 -->
+        <div class="card">
+            <div class="card-title">
+                <span>✨</span>
+                你在家做的事
+            </div>
+            <div class="activity-tags">
+                <div class="activity-tag">
+                    ☕ 喝咖啡
+                    <span class="activity-count">156次</span>
+                </div>
+                <div class="activity-tag">
+                    📖 阅读
+                    <span class="activity-count">89次</span>
+                </div>
+                <div class="activity-tag">
+                    🎵 听音乐
+                    <span class="activity-count">243次</span>
+                </div>
+                <div class="activity-tag">
+                    🧘 冥想放松
+                    <span class="activity-count">67次</span>
+                </div>
+                <div class="activity-tag">
+                    💻 工作学习
+                    <span class="activity-count">198次</span>
+                </div>
+                <div class="activity-tag">
+                    🎬 看电影
+                    <span class="activity-count">52次</span>
+                </div>
+                <div class="activity-tag">
+                    🧹 整理收纳
+                    <span class="activity-count">78次</span>
+                </div>
+                <div class="activity-tag">
+                    🌱 照顾植物
+                    <span class="activity-count">112次</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 年度数据总结 -->
+        <div class="card">
+            <div class="card-title">
+                <span>🎯</span>
+                2025年度数据
+            </div>
+            <div class="stat-cards">
+                <div class="stat-card">
+                    <div class="stat-number">2,618</div>
+                    <div class="stat-label">在家总小时</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">186</div>
+                    <div class="stat-label">美好瞬间</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">43</div>
+                    <div class="stat-label">家庭聚会</div>
+                </div>
+            </div>
+            
+            <div class="progress-item">
+                <div class="progress-header">
+                    <span>独处成长时光</span>
+                    <span>68%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 68%; background: linear-gradient(90deg, #A7B5C3, #8A9AB0);"></div>
+                </div>
+            </div>
+            
+            <div class="progress-item">
+                <div class="progress-header">
+                    <span>家人陪伴时光</span>
+                    <span>32%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 32%; background: linear-gradient(90deg, #C9B5B3, #B5A199);"></div>
+                </div>
+            </div>
+            
+            <div class="progress-item">
+                <div class="progress-header">
+                    <span>生活满意度</span>
+                    <span>92%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 92%; background: linear-gradient(90deg, #A9B5A0, #8FA185);"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 结束语 -->
+        <div class="card">
+            <div class="quote-block" style="border-left: none;">
+                <div class="quote-text" style="font-size: 20px;">
+                    "家不在于大小<br>
+                    而在于每一个温暖的瞬间"
+                </div>
+                <div class="quote-author" style="margin-top: 20px;">
+                    ✨ 2025年，你在家度过了 2,618 个小时
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 页面加载动画
+        window.addEventListener('load', function() {
+            // 柱状图动画
+            const bars = document.querySelectorAll('.chart-bar');
+            bars.forEach((bar, index) => {
+                const height = bar.style.height;
+                bar.style.height = '0%';
+                setTimeout(() => {
+                    bar.style.height = height;
+                }, 500 + index * 100);
+            });
+            
+            // 进度条动画
+            const progressBars = document.querySelectorAll('.progress-bar-fill');
+            progressBars.forEach((bar, index) => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 800 + index * 200);
+            });
+        });
+    </script>
+</body>
+</html>

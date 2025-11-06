@@ -19,7 +19,42 @@ function navigateToPage(pageName) {
     const targetPage = document.querySelector(`[data-page="${pageName}"]`);
     if (targetPage) {
         targetPage.classList.add('active');
+        
+        // Update countdown progress when navigating to rooms page
+        if (pageName === 'rooms') {
+            setTimeout(() => {
+                updateCountdownProgress();
+            }, 100);
+        }
+        
+        // Adjust iframe heights when navigating to memories page
+        if (pageName === 'memories') {
+            setTimeout(() => {
+                adjustMemoriesIframeHeights();
+            }, 300);
+        }
     }
+}
+
+// ============================================
+// Enter/Welcome Page Navigation
+// ============================================
+
+// Handle click on enter page button (Login with Email)
+const enterPageButton = document.querySelector('.enter-page__button');
+if (enterPageButton) {
+    enterPageButton.addEventListener('click', () => {
+        navigateToPage('home');
+    });
+}
+
+// Handle click on enter page sign up link
+const enterPageSignUpLink = document.querySelector('.enter-page__signup-link');
+if (enterPageSignUpLink) {
+    enterPageSignUpLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        navigateToPage('home');
+    });
 }
 
 // ============================================
@@ -51,6 +86,14 @@ const roomsBackButton = document.querySelector('.rooms-page__back-button');
 if (roomsBackButton) {
     roomsBackButton.addEventListener('click', () => {
         navigateToPage('home');
+    });
+}
+
+// Handle click on Home memories button in rooms page
+const roomsMemoriesButton = document.querySelector('.rooms-page__memories-button');
+if (roomsMemoriesButton) {
+    roomsMemoriesButton.addEventListener('click', () => {
+        navigateToPage('memories');
     });
 }
 
@@ -115,6 +158,18 @@ document.addEventListener('click', (e) => {
 });
 
 // ============================================
+// Memories Page Navigation
+// ============================================
+
+// Handle click on back button in memories page
+const memoriesBackButton = document.querySelector('.memories-page__back-button');
+if (memoriesBackButton) {
+    memoriesBackButton.addEventListener('click', () => {
+        navigateToPage('rooms');
+    });
+}
+
+// ============================================
 // Album Modal Functions
 // ============================================
 
@@ -134,25 +189,8 @@ function openAlbumModal() {
         
         albumModal.classList.add('active');
         
-        // Make static photos clickable if they exist, otherwise load photos dynamically
-        const photoGrid = document.getElementById('photoGrid');
-        if (photoGrid) {
-            const existingPhotos = photoGrid.querySelectorAll('img.album-photo');
-            if (existingPhotos.length > 0) {
-                // Static photos exist in HTML - make them clickable
-                const photoPaths = Array.from(existingPhotos).map(img => img.src);
-                existingPhotos.forEach((img, index) => {
-                    // Remove any existing click listeners to avoid duplicates
-                    img.onclick = null;
-                    img.addEventListener('click', () => {
-                        openLightbox(photoPaths, index);
-                    });
-                });
-            } else {
-                // No static photos - load dynamically
-                loadPhotos();
-            }
-        }
+        // Always load photos dynamically based on current room
+        loadPhotos();
     }
 }
 
@@ -207,9 +245,9 @@ function loadPhotos() {
     // Get the photo directory name for this room
     const photoDir = roomToPhotoDirMap[currentRoomName] || 'living-room';
     
-    // Generate photo paths (6 photos: picture1.jpg through picture6.jpg)
+    // Generate photo paths (14 photos: picture1.jpg through picture14.jpg)
     const photoPaths = [];
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 14; i++) {
         photoPaths.push(`imgs/album/${photoDir}/picture${i}.jpg`);
     }
     
@@ -222,6 +260,7 @@ function loadPhotos() {
         const img = document.createElement('img');
         img.src = photoPath;
         img.alt = `${currentRoomName} - Photo ${index + 1}`;
+        img.className = 'album-photo';
         img.addEventListener('click', () => {
             openLightbox(photoPaths, index);
         });
@@ -229,12 +268,18 @@ function loadPhotos() {
         // Handle image load error (if image doesn't exist)
         img.addEventListener('error', () => {
             console.warn(`Image not found: ${photoPath}`);
-            // Optionally hide the broken image or show a placeholder
+            // Hide the broken image
             img.style.display = 'none';
         });
         
         photoGrid.appendChild(img);
     });
+    
+    // Update lightbox total photos count
+    const totalPhotosSpan = document.querySelector('.lightbox-total-photos');
+    if (totalPhotosSpan) {
+        totalPhotosSpan.textContent = photoPaths.length;
+    }
 }
 
 // ============================================
@@ -489,6 +534,137 @@ function changeBackgroundImage(imageSrc) {
 // to update the background based on the timeline position
 
 // ============================================
+// 3D Tilt Effect for Room Cards
+// ============================================
+
+function initializeCardTiltEffect() {
+    const roomCards = document.querySelectorAll('.room-card');
+    
+    roomCards.forEach(card => {
+        card.classList.add('tilt-effect');
+        
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 15; // 调整倾斜强度（更轻微）
+            const rotateY = (centerX - x) / 15;
+            
+            // 应用3D倾斜效果，同时保持悬停的位移和缩放
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px) scale(1.02)`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            // 恢复默认状态
+            card.style.transform = '';
+        });
+    });
+}
+
+// ============================================
+// Floating Button Functionality
+// ============================================
+
+function initializeFloatingButton() {
+    const floatingButton = document.querySelector('.rooms-page__floating-button');
+    
+    if (floatingButton) {
+        floatingButton.addEventListener('click', () => {
+            // 可以添加快速操作功能，比如滚动到顶部、显示菜单等
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+}
+
+function initializeDetailFloatingButton() {
+    const floatingButtons = document.querySelectorAll('.detail-page__floating-button');
+    
+    floatingButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // 可以添加快速操作功能，比如滚动到顶部、显示菜单等
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    });
+}
+
+// ============================================
+// Countdown Progress Ring Update
+// ============================================
+
+function updateCountdownProgress() {
+    const progressFill = document.querySelector('.countdown-progress-fill');
+    const countdownDays = document.querySelector('.countdown-days');
+    
+    if (!progressFill || !countdownDays) return;
+    
+    // Get the current countdown days (default: 71)
+    const daysRemaining = parseInt(countdownDays.textContent) || 71;
+    const totalDays = 90; // Assuming 90 days total
+    const daysPassed = totalDays - daysRemaining;
+    const progressPercentage = (daysPassed / totalDays) * 100;
+    
+    // Calculate the stroke-dashoffset
+    // Circumference = 2 * π * r = 2 * π * 90 ≈ 565.48
+    const circumference = 2 * Math.PI * 90;
+    const offset = circumference - (circumference * progressPercentage / 100);
+    
+    // Set initial position
+    progressFill.style.strokeDashoffset = circumference;
+    
+    // Animate to final position
+    setTimeout(() => {
+        progressFill.style.transition = 'stroke-dashoffset 2s ease-out';
+        progressFill.style.strokeDashoffset = offset;
+    }, 100);
+}
+
+// ============================================
+// Memories Page Iframe Height Adjustment
+// ============================================
+
+function adjustMemoriesIframeHeights() {
+    const iframes = document.querySelectorAll('.memories-page__iframe');
+    
+    iframes.forEach(iframe => {
+        try {
+            // Try to get the content height from iframe
+            const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+            const body = iframeDocument.body;
+            const html = iframeDocument.documentElement;
+            
+            // Get the actual content height
+            const height = Math.max(
+                body.scrollHeight,
+                body.offsetHeight,
+                html.clientHeight,
+                html.scrollHeight,
+                html.offsetHeight
+            );
+            
+            // Set iframe height to content height + some padding
+            if (height > 0) {
+                iframe.style.height = (height + 40) + 'px';
+                iframe.parentElement.style.height = (height + 40) + 'px';
+            }
+        } catch (e) {
+            // Cross-origin restriction - use default height
+            console.log('Cannot access iframe content (cross-origin):', e);
+            // Keep the default height set in CSS
+        }
+    });
+}
+
+// ============================================
 // Initialize Application
 // ============================================
 
@@ -498,6 +674,75 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize timeline sliders for all detail pages
     initializeTimelineSliders();
+    
+    // Update countdown progress ring
+    updateCountdownProgress();
+    
+    // Initialize card tilt effect when rooms page is active
+    const roomsPage = document.querySelector('[data-page="rooms"]');
+    if (roomsPage) {
+        // Use MutationObserver to detect when rooms page becomes active
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const target = mutation.target;
+                    if (target.classList.contains('active')) {
+                        // Initialize tilt effect when page becomes active
+                        setTimeout(() => {
+                            initializeCardTiltEffect();
+                            initializeFloatingButton();
+                        }, 100);
+                    }
+                }
+            });
+        });
+        
+        observer.observe(roomsPage, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+        
+        // Also initialize if page is already active
+        if (roomsPage.classList.contains('active')) {
+            setTimeout(() => {
+                initializeCardTiltEffect();
+                initializeFloatingButton();
+            }, 100);
+        }
+    }
+    
+    // Initialize detail page floating buttons
+    const detailPages = document.querySelectorAll('[data-page^="detail-"]');
+    if (detailPages.length > 0) {
+        // Use MutationObserver to detect when detail pages become active
+        detailPages.forEach(detailPage => {
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        const target = mutation.target;
+                        if (target.classList.contains('active')) {
+                            // Initialize floating button when page becomes active
+                            setTimeout(() => {
+                                initializeDetailFloatingButton();
+                            }, 100);
+                        }
+                    }
+                });
+            });
+            
+            observer.observe(detailPage, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+            
+            // Also initialize if page is already active
+            if (detailPage.classList.contains('active')) {
+                setTimeout(() => {
+                    initializeDetailFloatingButton();
+                }, 100);
+            }
+        });
+    }
     
     // Add any initialization code here
     console.log('Home Memories app initialized');

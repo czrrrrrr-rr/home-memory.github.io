@@ -3,18 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Memories - 这里存储着你的美好时光</title>
+    <title>Home Memories - WELCOME, HOME</title>
+    <!-- Google Fonts - Slab Serif 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@700;900&family=Arvo:wght@700&family=Bitter:wght@700&family=Josefin+Slab:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Main Container Wrapper -->
-    <div class="app-wrapper">
+
         
         <!-- Home Page Container -->
-        <div class="page active" data-page="home">
+        <div class="page" data-page="home">
             <div class="home-page__background"></div>
             <div class="home-page__content">
-                <h1 class="home-page__title">这里存储着你的美好时光</h1>
+                <h1 class="home-page__title">
+                    <span class="home-page__title-char">W</span>
+                    <span class="home-page__title-char">E</span>
+                    <span class="home-page__title-char">L</span>
+                    <span class="home-page__title-char">C</span>
+                    <span class="home-page__title-char">O</span>
+                    <span class="home-page__title-char">M</span>
+                    <span class="home-page__title-char">E</span>
+                    <span class="home-page__title-char">，</span>
+                    <span class="home-page__title-char">H</span>
+                    <span class="home-page__title-char">O</span>
+                    <span class="home-page__title-char">M</span>
+                    <span class="home-page__title-char">E</span>
+                
+                </h1>
+                <div class="home-page__divider"></div>
                 <div class="home-page__icon-container">
                     <img src="imgs/icon/initial_door.jpg" alt="Home Door" class="home-page__icon" id="doorImage">
                 </div>
@@ -28,61 +47,126 @@
                 <!-- Top Navigation -->
                 <nav class="rooms-page__navigation">
                     <div class="rooms-page__logo">Home Memories</div>
-                    <button class="rooms-page__back-button" type="button">返回</button>
+                    <div class="rooms-page__nav-buttons">
+                        <button class="rooms-page__memories-button" type="button">Home memories</button>
+                        <button class="rooms-page__back-button" type="button">返回</button>
+                    </div>
                 </nav>
+
+                <!-- Hero Section - Countdown -->
+                <div class="rooms-page__countdown">
+                    <div class="countdown-container">
+                        <!-- Decorative Elements -->
+                        <div class="countdown-decorations">
+                            <div class="countdown-star countdown-star--1">⭐</div>
+                            <div class="countdown-star countdown-star--2">⭐</div>
+                            <div class="countdown-star countdown-star--3">⭐</div>
+                            <div class="countdown-key countdown-key--1">🗝️</div>
+                            <div class="countdown-key countdown-key--2">🗝️</div>
+                        </div>
+                        
+                        <!-- Main Countdown Content -->
+                        <div class="countdown-hero">
+                            <p class="countdown-label">与这个家相伴的第</p>
+                            <div class="countdown-number-wrapper">
+                                <span class="countdown-days">12071</span>
+                                <span class="countdown-unit">天</span>
+                                <!-- Circular Progress Ring -->
+                                <svg class="countdown-progress-ring" width="200" height="200">
+                                    <circle class="countdown-progress-bg" cx="100" cy="100" r="90" fill="none" stroke="#e0e0e0" stroke-width="8"/>
+                                    <circle class="countdown-progress-fill" cx="100" cy="100" r="90" fill="none" stroke="url(#countdownGradient)" stroke-width="8" stroke-linecap="round" transform="rotate(-90 100 100)"/>
+                                    <defs>
+                                        <linearGradient id="countdownGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" style="stop-color:#A7B5C3;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#8A9AB0;stop-opacity:1" />
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                            <p class="countdown-date">自 2004年4月10日入住</p>
+                            <p class="countdown-motto">每一个瞬间都值得珍藏</p>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Room Cards Grid -->
                 <div class="rooms-page__grid">
+                    <!-- Timeline Path -->
+                    <div class="rooms-page__timeline-path"></div>
+                    
                     <!-- Living Room Card -->
-                    <div class="room-card" data-room="living-room" data-room-name="客厅" data-room-name-en="Living Room">
+                    <div class="room-card room-card--living-room" data-room="living-room" data-room-name="客厅" data-room-name-en="Living Room">
                         <div class="room-card__icon-container">
+                            <span class="room-card__emoji">🛋️</span>
                             <img src="imgs/icon/living-room_icon.jpg" alt="Living Room" class="room-card__icon">
+                            <div class="room-card__gradient-overlay room-card__gradient-overlay--living-room"></div>
                         </div>
-                        <h3 class="room-card__name">客厅</h3>
-                        <p class="room-card__name-en">Living Room</p>
-                        <p class="room-card__description">温馨的家庭聚会空间</p>
+                        <div class="room-card__content">
+                            <h3 class="room-card__name">客厅</h3>
+                            <p class="room-card__name-en">Living Room</p>
+                            <p class="room-card__description">127次笑声在这里回荡</p>
+                        </div>
                     </div>
 
                     <!-- Bedroom Card -->
-                    <div class="room-card" data-room="bedroom" data-room-name="卧室" data-room-name-en="Bedroom">
+                    <div class="room-card room-card--bedroom" data-room="bedroom" data-room-name="卧室" data-room-name-en="Bedroom">
                         <div class="room-card__icon-container">
+                            <span class="room-card__emoji">🛏️</span>
                             <img src="imgs/icon/bedroom_icon.jpg" alt="Bedroom" class="room-card__icon">
+                            <div class="room-card__gradient-overlay room-card__gradient-overlay--bedroom"></div>
                         </div>
-                        <h3 class="room-card__name">卧室</h3>
-                        <p class="room-card__name-en">Bedroom</p>
-                        <p class="room-card__description">私密舒适的休息空间</p>
+                        <div class="room-card__content">
+                            <h3 class="room-card__name">卧室</h3>
+                            <p class="room-card__name-en">Bedroom</p>
+                            <p class="room-card__description">2,186小时的安睡时光</p>
+                        </div>
                     </div>
 
                     <!-- Balcony Card -->
-                    <div class="room-card" data-room="balcony" data-room-name="阳台" data-room-name-en="Balcony">
+                    <div class="room-card room-card--balcony" data-room="balcony" data-room-name="阳台" data-room-name-en="Balcony">
                         <div class="room-card__icon-container">
+                            <span class="room-card__emoji">🌿</span>
                             <img src="imgs/icon/balcony_icon.jpg" alt="Balcony" class="room-card__icon">
+                            <div class="room-card__gradient-overlay room-card__gradient-overlay--balcony"></div>
                         </div>
-                        <h3 class="room-card__name">阳台</h3>
-                        <p class="room-card__name-en">Balcony</p>
-                        <p class="room-card__description">享受阳光与清新的空间</p>
+                        <div class="room-card__content">
+                            <h3 class="room-card__name">阳台</h3>
+                            <p class="room-card__name-en">Balcony</p>
+                            <p class="room-card__description">记录了43次家庭聚餐</p>
+                        </div>
                     </div>
 
                     <!-- Study Card -->
-                    <div class="room-card" data-room="study" data-room-name="书房" data-room-name-en="Study">
+                    <div class="room-card room-card--study" data-room="study" data-room-name="书房" data-room-name-en="Study">
                         <div class="room-card__icon-container">
+                            <span class="room-card__emoji">📚</span>
                             <img src="imgs/icon/study_icon.jpg" alt="Study" class="room-card__icon">
+                            <div class="room-card__gradient-overlay room-card__gradient-overlay--study"></div>
                         </div>
-                        <h3 class="room-card__name">书房</h3>
-                        <p class="room-card__name-en">Study</p>
-                        <p class="room-card__description">安静思考学习的空间</p>
+                        <div class="room-card__content">
+                            <h3 class="room-card__name">书房</h3>
+                            <p class="room-card__name-en">Study</p>
+                            <p class="room-card__description">见证了你的每个清晨</p>
+                        </div>
                     </div>
 
                     <!-- Room Card -->
-                    <div class="room-card" data-room="room" data-room-name="房间" data-room-name-en="Room">
+                    <div class="room-card room-card--room" data-room="room" data-room-name="房间" data-room-name-en="Room">
                         <div class="room-card__icon-container">
+                            <span class="room-card__emoji">🧸</span>
                             <img src="imgs/icon/room_icon.jpg" alt="Room" class="room-card__icon">
+                            <div class="room-card__gradient-overlay room-card__gradient-overlay--room"></div>
                         </div>
-                        <h3 class="room-card__name">房间</h3>
-                        <p class="room-card__name-en">Room</p>
-                        <p class="room-card__description">温馨舒适的个人空间</p>
+                        <div class="room-card__content">
+                            <h3 class="room-card__name">房间</h3>
+                            <p class="room-card__name-en">Room</p>
+                            <p class="room-card__description">记录了你的每个瞬间</p>
+                        </div>
                     </div>
                 </div>
+                
+                <!-- 右下角悬浮按钮 -->
+                <button class="rooms-page__floating-button" type="button" aria-label="快速操作">+</button>
             </div>
         </div>
 
@@ -135,6 +219,9 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- 右下角悬浮按钮 -->
+                <button class="detail-page__floating-button" type="button" aria-label="快速操作">+</button>
             </div>
         </div>
 
@@ -187,6 +274,9 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- 右下角悬浮按钮 -->
+                <button class="detail-page__floating-button" type="button" aria-label="快速操作">+</button>
             </div>
         </div>
 
@@ -239,6 +329,9 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- 右下角悬浮按钮 -->
+                <button class="detail-page__floating-button" type="button" aria-label="快速操作">+</button>
             </div>
         </div>
 
@@ -291,6 +384,9 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- 右下角悬浮按钮 -->
+                <button class="detail-page__floating-button" type="button" aria-label="快速操作">+</button>
             </div>
         </div>
 
@@ -343,6 +439,32 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- 右下角悬浮按钮 -->
+                <button class="detail-page__floating-button" type="button" aria-label="快速操作">+</button>
+            </div>
+        </div>
+
+        <!-- Memories Page Container -->
+        <div class="page" data-page="memories">
+            <div class="memories-page">
+                <!-- Top Navigation -->
+                <nav class="memories-page__navigation">
+                    <button class="memories-page__back-button" type="button">返回</button>
+                    <h2 class="memories-page__title">Home Memories</h2>
+                </nav>
+
+                <!-- Memories HTML Container -->
+                <div class="memories-page__content">
+                    <div class="memories-page__html-container">
+                        <div class="memories-page__html-wrapper">
+                            <iframe src="home_memory_dashboard.html" class="memories-page__iframe" frameborder="0" scrolling="auto"></iframe>
+                        </div>
+                        <div class="memories-page__html-wrapper">
+                            <iframe src="room_story_charts.html" class="memories-page__iframe" frameborder="0" scrolling="auto"></iframe>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -357,12 +479,7 @@
                 <button class="album-close" type="button" aria-label="Close Album">&times;</button>
             </header>
             <div class="photo-grid" id="photoGrid">
-                <img src="imgs/album/living-room/picture1.jpg" alt="Living Room Photo 1" class="album-photo">
-                <img src="imgs/album/living-room/picture2.jpg" alt="Living Room Photo 2" class="album-photo">
-                <img src="imgs/album/living-room/picture3.jpg" alt="Living Room Photo 3" class="album-photo">
-                <img src="imgs/album/living-room/picture4.jpg" alt="Living Room Photo 4" class="album-photo">
-                <img src="imgs/album/living-room/picture5.jpg" alt="Living Room Photo 5" class="album-photo">
-                <img src="imgs/album/living-room/picture6.jpg" alt="Living Room Photo 6" class="album-photo">
+                <!-- Photos will be dynamically loaded here -->
             </div>
         </div>
     </div>
