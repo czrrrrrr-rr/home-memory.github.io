@@ -233,6 +233,7 @@ function loadPhotos() {
     
     // Clear existing photos
     photoGrid.innerHTML = '';
+    photoGrid.classList.remove('photo-grid--time-machine');
     
     // Find the currently active detail page
     const activeDetailPage = document.querySelector('.page.active[data-page^="detail-"]');
@@ -244,7 +245,201 @@ function loadPhotos() {
     
     // Get the photo directory name for this room
     const photoDir = roomToPhotoDirMap[currentRoomName] || 'living-room';
-    
+
+    const timeMachineConfigs = {
+        'living-room': {
+            badge: 'Home Memories · Living Room',
+            title: '客厅时光机',
+            intro: '闭上眼，蒸汽与琴声、木头与阳光在鼻尖层叠。我们重新踏进那间客厅，用味道、触感与微光，把曾经的欢笑一点点拾回。',
+            slides: [
+                {
+                    image: 'imgs/album/living-room/picture3.jpg',
+                    alt: '黄昏下的沙发',
+                    meta: ['夏末 · 傍晚 18:40', '香气：柑橘 + 白麝香'],
+                    heading: '黄昏的留白',
+                    text: '风扇推着栀子花的香味在客厅里绕圈，纱帘微微起伏。绒面沙发仍保存着白日余温，光柱落在木地板上，仿佛为我们保留了一处静坐的留白。'
+                },
+                {
+                    image: 'imgs/album/living-room/picture4.jpg',
+                    alt: '餐桌上的晚餐',
+                    meta: ['初秋 · 夜晚 20:15', '声响：碗筷 + 老歌'],
+                    heading: '蒸汽里的合奏',
+                    text: '锅盖被掀开的瞬间，酱油与葱花的热气扑向脸颊。笑声、碗筷碰撞与收音机里的老歌交错成节拍，连潮湿的桌布都带着家人相聚的温度。'
+                },
+                {
+                    image: 'imgs/album/living-room/picture5.jpg',
+                    alt: '墙面与相框细节',
+                    meta: ['冬日 · 深夜 22:30', '触感：木框 + 微尘'],
+                    heading: '影子的呼吸',
+                    text: '指尖掠过相框的木质纹理，细细的粉尘藏着暗室冲洗时残留的药水味。小夜灯亮起，光影沿着墙面慢慢移动，讲起我们聊到深夜的旧故事。'
+                }
+            ]
+        },
+        'bedroom': {
+            badge: 'Home Memories · Bedroom',
+            title: '卧室时光机',
+            intro: '夜色像绵密的棉花糖缠绕着床沿，木质衣柜的香气与白噪声一起包裹着我们。那些缓慢沉眠的夜晚，总在味道与触感里被唤醒。',
+            slides: [
+                {
+                    image: 'imgs/album/bedroom/picture3.jpg',
+                    alt: '柔软床品特写',
+                    meta: ['春夜 · 22:05', '触感：天丝床单 + 羽绒被'],
+                    heading: '缓慢沉睡',
+                    text: '刚换上的天丝床单带着洗衣液的花香，羽绒被轻轻贴合着身体。指尖掠过枕套的刺绣边，仿佛能听见窗外的风轻声呼吸。'
+                },
+                {
+                    image: 'imgs/album/bedroom/picture4.jpg',
+                    alt: '床头灯与床边书',
+                    meta: ['入夏 · 21:18', '光线：暖色壁灯 35%'],
+                    heading: '微光阅夜',
+                    text: '床头壁灯散出蜂蜜色的光，书页翻动时带出纸张的淡淡木香。夜风轻拂纱帘，远处的风铃声点缀在字里行间。'
+                },
+                {
+                    image: 'imgs/album/bedroom/picture5.jpg',
+                    alt: '衣柜与香氛摆件',
+                    meta: ['初冬 · 19:42', '香气：雪松 + 洋甘菊'],
+                    heading: '衣橱的气息',
+                    text: '衣柜抽屉一开，雪松木的干燥气息与洋甘菊香氛缓缓升腾。手掌滑过衣料纤维，仿佛那些出行的清晨都在等待。'
+                }
+            ]
+        },
+        'balcony': {
+            badge: 'Home Memories · Balcony',
+            title: '阳台时光机',
+            intro: '在阳光和风之间，咖啡与土壤的味道同样柔软。阳台记录了清晨的鸟鸣、午后的日光和夜晚的微光。',
+            slides: [
+                {
+                    image: 'imgs/album/balcony/picture3.jpg',
+                    alt: '阳台绿植与阳光',
+                    meta: ['初春 · 清晨 07:05', '香气：湿润土壤 + 柠檬薄荷'],
+                    heading: '绿意甦醒',
+                    text: '晨光在叶片上洒下露珠，指尖触碰土壤仍有夜里残留的凉意。薄荷的清香与晨雾混合，把城市气息洗成森林。'
+                },
+                {
+                    image: 'imgs/album/balcony/picture4.jpg',
+                    alt: '阳台咖啡与早餐',
+                    meta: ['盛夏 · 上午 09:40', '声响：风铃 + 咖啡磨豆'],
+                    heading: '午前慢调',
+                    text: '磨豆机的节奏与远处鸟鸣同步，咖啡香携着烤面包的酥脆气味。阳光掀开桌布，早餐在风里摇曳。'
+                },
+                {
+                    image: 'imgs/album/balcony/picture5.jpg',
+                    alt: '傍晚阳台灯光',
+                    meta: ['初秋 · 夜晚 19:55', '光线：串灯 + 烛光'],
+                    heading: '星光缠绕',
+                    text: '串灯绕过栏杆，烛光里浮着柑橘香氛。晚风吹动轻纱，远处传来隐约琴声，夜晚在这张小桌上慢慢展开。'
+                }
+            ]
+        },
+        'study': {
+            badge: 'Home Memories · Study',
+            title: '书房时光机',
+            intro: '纸页翻动、咖啡蒸汽与光影共同构成书房的节奏。那是灵感最容易落脚的地方，也是心灵最安静的岸。',
+            slides: [
+                {
+                    image: 'imgs/album/study/picture3.jpg',
+                    alt: '书房书桌与笔记',
+                    meta: ['周末 · 上午 09:12', '香气：墨水 + 柑橘蜡烛'],
+                    heading: '纸上的温度',
+                    text: '墨水在纸上晕开淡淡的蓝色，柑橘蜡烛的香味在笔记页间徘徊。阳光沿着桌脚滑下，像为灵感暖场。'
+                },
+                {
+                    image: 'imgs/album/study/picture4.jpg',
+                    alt: '书架与收纳细节',
+                    meta: ['雨季 · 下午 16:20', '声响：雨滴 + 留声机'],
+                    heading: '架上的雨声',
+                    text: '雨滴敲打窗台，留声机里播着旧爵士。手指划过书脊的凹凸纹理，空气里混着旧书纸张和木头的味道。'
+                },
+                {
+                    image: 'imgs/album/study/picture5.jpg',
+                    alt: '窗边阅读角落',
+                    meta: ['冬日 · 夜晚 21:05', '触感：法兰绒 + 热牛奶'],
+                    heading: '夜读的光',
+                    text: '法兰绒毛毯圈住膝盖，热牛奶的香味在杯沿缠绕。小壁灯照亮页角，夜色像墨一样铺在窗外。'
+                }
+            ]
+        },
+        'room': {
+            badge: 'Home Memories · Cozy Room',
+            title: '房间时光机',
+            intro: '这里收藏着个人的小宇宙：香薰、手帐、耳边的歌，还有与朋友们的窃窃私语。房间是自我慢慢生长的容器。',
+            slides: [
+                {
+                    image: 'imgs/album/room/picture3.jpg',
+                    alt: '房间墙面展示',
+                    meta: ['岁末 · 下午 15:50', '触感：相纸 + 软木板'],
+                    heading: '收藏的片段',
+                    text: '相纸被夹在软木板上，指尖能感到针孔与纸张的起伏。空气里有卷轴香薰与手帐纸胶的混合味道。'
+                },
+                {
+                    image: 'imgs/album/room/picture4.jpg',
+                    alt: '房间角落与座椅',
+                    meta: ['周五 · 晚上 19:30', '声响：轻音乐 + 键盘敲击'],
+                    heading: '软座的独白',
+                    text: '软座上堆着最喜欢的抱枕，轻音乐伴着键盘的节拍在空气里缓慢敲击。手里握着热可可，甜味让疲惫慢慢溶解。'
+                },
+                {
+                    image: 'imgs/album/room/picture5.jpg',
+                    alt: '房间床头与台灯',
+                    meta: ['雨夜 · 深夜 23:18', '光线：琥珀台灯 + 小夜灯'],
+                    heading: '雨声入梦',
+                    text: '雨点敲打窗框，琥珀色台灯把墙面染成柔和的金色。空气里是琥珀香薰与雨水的混合气息，像夜晚轻声哼唱。'
+                }
+            ]
+        }
+    };
+
+    if (timeMachineConfigs[photoDir]) {
+        const config = timeMachineConfigs[photoDir];
+        const slidesMarkup = config.slides.map((slide, index) => `
+            <figure class="time-machine__entry">
+                <img src="${slide.image}" alt="${slide.alt}" class="time-machine__image">
+                <figcaption class="time-machine__caption">
+                    <div class="time-machine__meta">
+                        ${slide.meta.map(item => `<span class="time-machine__meta-item">${item}</span>`).join('')}
+                    </div>
+                    <h4>${slide.heading}</h4>
+                    <p>${slide.text}</p>
+                </figcaption>
+            </figure>
+        `).join('');
+
+        photoGrid.classList.add('photo-grid--time-machine');
+        photoGrid.innerHTML = `
+            <section class="time-machine">
+                <header class="time-machine__header">
+                    <span class="time-machine__badge">${config.badge}</span>
+                    <h3 class="time-machine__title">${config.title}</h3>
+                    <p class="time-machine__intro">${config.intro}</p>
+                </header>
+                <div class="time-machine__entries">
+                    ${slidesMarkup}
+                </div>
+            </section>
+        `;
+
+        const curatedImages = photoGrid.querySelectorAll('.time-machine__image');
+        const curatedPaths = config.slides.map(slide => slide.image);
+
+        const totalPhotosSpan = document.querySelector('.lightbox-total-photos');
+        if (totalPhotosSpan) {
+            totalPhotosSpan.textContent = String(config.slides.length);
+        }
+
+        const currentIndexSpan = document.querySelector('.lightbox-current-index');
+        if (currentIndexSpan) {
+            currentIndexSpan.textContent = '1';
+        }
+
+        currentPhotos = curatedPaths;
+        currentPhotoIndex = 0;
+
+        curatedImages.forEach((img, index) => {
+            img.addEventListener('click', () => openLightbox(curatedPaths, index));
+        });
+        return;
+    }
+
     // Generate photo paths (14 photos: picture1.jpg through picture14.jpg)
     const photoPaths = [];
     for (let i = 1; i <= 14; i++) {
@@ -402,7 +597,8 @@ function initializeTimelineSliders() {
 
 function setupTimelineSlider(timelineSlider, timelineHandle, timelineTrack, detailPage) {
     let isDragging = false;
-    let currentPosition = 50; // Start at 50% (middle)
+    const initialPosition = 0;
+    let currentPosition = initialPosition;
     
     // Find background images within this specific detail page
     const layer1 = detailPage.querySelector('.detail-page__background--layer-1');
@@ -501,7 +697,7 @@ function setupTimelineSlider(timelineSlider, timelineHandle, timelineTrack, deta
     document.addEventListener('touchend', handleTouchEnd);
     
     // Initialize handle position and background
-    updateHandlePosition(50);
+    updateHandlePosition(initialPosition);
 }
 
 // ============================================
